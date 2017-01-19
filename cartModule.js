@@ -36,6 +36,7 @@ var cartModule = (function () { // namespace
 
         addToCart(){ // Добавляем товар в корзину
 
+            dd(opencart.count);
             let item = {
                 id       : parseInt(this.getAttribute('data-id')),
                 title    : this.parentNode.querySelector('.title').innerHTML,
@@ -84,6 +85,7 @@ var cartModule = (function () { // namespace
                     ++i;
                     price = price + parseInt(data[items][1]);
                     count = count + parseInt(data[items][2]);
+                    opencart.count = count;
 
                     opencart.items += '<tr>';
                     opencart.items += '<td>' + i + '</td>';
@@ -102,6 +104,7 @@ var cartModule = (function () { // namespace
                     cart.addEvent(quantity[j].querySelector('.decrement'), 'click', cart.quantity);
                     cart.addEvent(quantity[j].querySelector('.increment'), 'click', cart.quantity);
                 }
+
 
             } else {
                 cartContent.innerHTML = 'В корзине пусто!';
@@ -138,6 +141,8 @@ var cartModule = (function () { // namespace
     var itemBox      = document.querySelectorAll('.item');
     var cartContent  = document.querySelector('#cart_content');
     var cartData     = cart.getCartData() || {};
+
+    cartContent.innerHTML = 'Корзина <sup>' + opencart.count + '</sup>';
 
     return {
         init : function() {
