@@ -49,13 +49,13 @@ var cartModule = (function () { // namespace
             if(data.hasOwnProperty(item.id)){ // если такой товар есть, то + 1 к количеству
 
                 opencart.count    = item.quantity + opencart.count; // Увеличиваем общее число товаров в корзине
-                data[item.id][2]  = item.quantity + data[item.id][2]; // Увеличиваем число товара в корзине
-                data[item.id][1]  = item.price * data[item.id][2]; // Увеличиваем цену
+                data[item.id][3]  = item.quantity + data[item.id][3]; // Увеличиваем число товара в корзине
+                data[item.id][2]  = item.price * data[item.id][3]; // Увеличиваем цену
 
             } else { // если товара в корзине еще нет, то добавляем в объект
 
                 opencart.count += item.quantity;
-                data[item.id]  = [item.title, item.price, item.quantity];
+                data[item.id]  = [item.id, item.title, item.price, item.quantity];
 
             }
 
@@ -76,33 +76,31 @@ var cartModule = (function () { // namespace
 
             if(Object.keys(data).length !== 0){
 
-                let i          = 0;
                 let count      = 0;
                 let price      = 0;
 
                 for(let items in data){
 
-                    ++i;
-                    price = price + parseInt(data[items][1]);
-                    count = count + parseInt(data[items][2]);
+                    price = price + parseInt(data[items][2]);
+                    count = count + parseInt(data[items][3]);
                     opencart.count = count;
 
-                    opencart.items += '<tr>';
-                    opencart.items += '<td>' + i + '</td>';
-                    opencart.items += '<td>' + data[items][0] + '</td>';
-                    opencart.items += '<td>' + data[items][1] + '</td>';
-                    opencart.items += '<td class="quantity"><span class="decrement">-</span> <span class="count">' + data[items][2] + '</span> <span class="increment">+</span></td>';
+                    opencart.items += '<tr class="row">';
+                    opencart.items += '<td data-id="' + data[items][0] + '">' + data[items][0] + '</td>';
+                    opencart.items += '<td class="title">' + data[items][1] + '</td>';
+                    opencart.items += '<td class="price">' + data[items][2] + '</td>';
+                    opencart.items += '<td><span class="decrement">-</span> <span class="count">' + data[items][3] + '</span> <span class="increment">+</span></td>';
                     opencart.items += '</tr>';
                 }
 
                 opencart.etc          = '<tr><td></td><td>ИТОГО:</td>' + '<td>' + price + '</td>' + '<td>' + count + '</td>' + '</tr>';
                 cartContent.innerHTML = opencart.header + opencart.items + opencart.etc + opencart.footer + opencart.form;
 
-                let quantity = cartContent.querySelectorAll('.quantity');
+                let row = cartContent.querySelectorAll('.row');
 
-                for(var j = 0; j < quantity.length; j++){
-                    cart.addEvent(quantity[j].querySelector('.decrement'), 'click', cart.quantity);
-                    cart.addEvent(quantity[j].querySelector('.increment'), 'click', cart.quantity);
+                for(var j = 0; j < row.length; j++){
+                    cart.addEvent(row[j].querySelector('.decrement'), 'click', cart.quantity);
+                    cart.addEvent(row[j].querySelector('.increment'), 'click', cart.quantity);
                 }
 
 
@@ -120,11 +118,18 @@ var cartModule = (function () { // namespace
         };
 
         quantity(){
-            let cart  = JSON.parse(localStorage.getItem('cart'));
-            let count = (this.innerHTML == '+') ? this.parentNode.querySelector('.count').innerHTML++ : this.parentNode.querySelector('.count').innerHTML--;
+            let row  = cartContent.querySelectorAll('.row');
+            let cart = JSON.parse(localStorage.getItem('cart'));
 
-            console.log(count);
+            if (this.innerHTML == '+') {
+                this.parentNode.querySelector('.count').innerHTML++;
+            } else {
+                if (this.parentNode.querySelector('.count').innerHTML > 1) {
+                    this.parentNode.querySelector('.count').innerHTML--;
+                }
+            }
         }
+
     }
 
     var cart         = new Cart();
