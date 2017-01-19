@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Тестируем корзину покупателя</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+
+	<div class="container">
+
+        <div class="container-fluid col-md-12 text-center">
+
+            <div class="item">
+                <h3 class="title">Samsung</h3>
+                <p>Цена: <span class="price">500</span>$</p>
+                <p class="quantity">1</p>
+                <button class="add_item" data-id="1">Добавить в корзину</button>
+            </div>
+
+
+            <div class="item">
+                <h3 class="title">LG</h3>
+                <p>Цена: <span class="price">450</span>$</p>
+                <p class="quantity">1</p>
+                <button class="add_item" data-id="2">Добавить в корзину</button>
+            </div>
+
+            <div class="item">
+                <h3 class="title">Sony</h3>
+                <p>Цена: <span class="price">550</span>$</p>
+                <p class="quantity">1</p>
+                <button class="add_item" data-id="3">Добавить в корзину</button>
+            </div>
+
+            <p><button id="checkout">Оформить заказ</button> &nbsp; <button id="clear_cart">Очистить корзину</button></p>
+
+
+            <div class="container-fluid col-md-12 text-center" id="cart_content">Корзина</div>
+
+
+        </div>
+
+	</div>
+
+    <script src="cartModule.js"></script>
+</body>
+</html>
