@@ -82,13 +82,13 @@ var cartModule = (function () { // namespace
                     item += '<td class="id">' + data[items][0] + '</td>';
                     item += '<td class="title">' + data[items][1] + '</td>';
                     item += '<td class="price">' + data[items][2] + '</td>';
-                    item += '<td><span class="decrement">-</span> <span class="count">' + data[items][3] + '</span> <span class="increment">+</span></td>';
-                    item += '<td class="delete">delete</td>';
+                    item += '<td><button class="decrement btn btn-primary">-</button> <button class="count btn btn-default">' + data[items][3] + '</button> <button class="increment btn btn-primary">+</button></td>';
+                    item += '<td class="delete"><button class="btn btn-warning">Удалить</button></td>';
                     item += '</tr>';
                 }
 
                 cartContent.innerHTML = '' +
-                    '<table width="100%" class="table-hover">' +
+                    '<table width="100%" class="table table-bordered table-hover">' +
                     '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th><th></th></tr>' +
                     item +
                     '<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td><td></td></tr>' +
@@ -103,7 +103,8 @@ var cartModule = (function () { // namespace
                 }
 
             } else {
-                checkout.innerHTML = 'В корзине пусто!';
+                checkout.innerHTML    = 'В корзине пусто!';
+                cartContent.innerHTML = ''
             }
         },
 

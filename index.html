@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Тестируем корзину покупателя</title>
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous">
+<title>Тестируем корзину RudraJS</title>
+    <link href="https://bootswatch.com/lumen/bootstrap.min.css" rel="stylesheet">
 
     <style>
         td{
             padding: 10px;
-            border: dashed 1px black;
+            border: dashed 1px #62c6ff;
         }
     </style>
 
@@ -21,14 +21,14 @@
 	<div class="container">
 
         <div class="container-fluid col-md-12 text-center">
-
-            <table width="100%">
+            <br>
+            <table width="100%" class="table table-bordered table-hover">
                 <tr class="item">
-                    <td class="title">Samsung</td>
-                    <td class="price">500</td>
+                    <td>Samsung</td>
+                    <td>500</td>
                     <td class="quantity">1</td>
                     <td>
-                        <button class="add_item"
+                        <button class="add_item btn btn-success"
                                 data-id="1"
                                 data-title="Samsung"
                                 data-price="500"
@@ -37,11 +37,11 @@
                     </td>
                 </tr>
                 <tr class="item">
-                    <td class="title">LG</td>
-                    <td class="price">450</td>
+                    <td>LG</td>
+                    <td>450</td>
                     <td class="quantity">1</td>
                     <td>
-                        <button class="add_item"
+                        <button class="add_item btn btn-success"
                                 data-id="2"
                                 data-title="LG"
                                 data-price="450"
@@ -49,11 +49,11 @@
                         >Добавить в корзину</button>
                     </td>
                 </tr>                <tr class="item">
-                <td class="title">Toshiba</td>
-                <td class="price">498</td>
+                <td>Toshiba</td>
+                <td>498</td>
                 <td class="quantity">1</td>
                 <td>
-                    <button class="add_item"
+                    <button class="add_item btn btn-success"
                             data-id="3"
                             data-title="Toshiba"
                             data-price="498"
@@ -61,11 +61,11 @@
                     >Добавить в корзину</button>
                 </td>
             </tr>                <tr class="item">
-                <td class="title">Sony</td>
-                <td class="price">510</td>
+                <td>Sony</td>
+                <td>510</td>
                 <td class="quantity">1</td>
                 <td>
-                    <button class="add_item"
+                    <button class="add_item btn btn-success"
                             data-id="4"
                             data-title="Sony"
                             data-price="510"
@@ -75,7 +75,7 @@
             </tr>
             </table>
             <br>
-            <p><button id="checkout">Оформить заказ</button> &nbsp; <button id="clear_cart">Очистить корзину</button></p>
+            <p><button id="checkout" class="btn btn-info">Оформить заказ</button> &nbsp; <button id="clear_cart" class="btn btn-primary">Очистить корзину</button></p>
 
             <div class="container-fluid col-md-12 text-center" id="cart_content"></div>
 
