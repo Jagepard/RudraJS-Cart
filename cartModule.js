@@ -83,14 +83,15 @@ var cartModule = (function () { // namespace
                     item += '<td class="title">' + data[items][1] + '</td>';
                     item += '<td class="price">' + data[items][2] + '</td>';
                     item += '<td><span class="decrement">-</span> <span class="count">' + data[items][3] + '</span> <span class="increment">+</span></td>';
+                    item += '<td class="delete">delete</td>';
                     item += '</tr>';
                 }
 
                 cartContent.innerHTML = '' +
                     '<table width="100%" class="table-hover">' +
-                    '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th></tr>' +
+                    '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th><th></th></tr>' +
                     item +
-                    '<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td></tr>' +
+                    '<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td><td></td></tr>' +
                     '</table>';
 
                 let quantity = cartContent.querySelectorAll('.quantity');
@@ -98,11 +99,20 @@ var cartModule = (function () { // namespace
                 for(let j = 0; j < quantity.length; j++){
                     cart.addEvent(quantity[j].querySelector('.decrement'), 'click', cart.quantity);
                     cart.addEvent(quantity[j].querySelector('.increment'), 'click', cart.quantity);
+                    cart.addEvent(quantity[j].querySelector('.delete'), 'click', cart.delete);
                 }
 
             } else {
                 cartContent.innerHTML = 'В корзине пусто!';
             }
+        },
+
+        delete : function () { // Удаляем элемент из корзины
+            var data = cart.getCartData();
+            delete data[this.parentNode.querySelector('.id').innerHTML];
+            this.parentNode.innerHTML = '';
+
+            cart.setCartData(data);
         },
 
         clearCart : function () {
