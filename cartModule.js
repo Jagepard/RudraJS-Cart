@@ -110,9 +110,8 @@ var cartModule = (function () { // namespace
         delete : function () { // Удаляем элемент из корзины
             var data = cart.getCartData();
             delete data[this.parentNode.querySelector('.id').innerHTML];
-            this.parentNode.innerHTML = '';
-
             cart.setCartData(data);
+            cart.openCart();
         },
 
         clearCart : function () {
@@ -122,6 +121,7 @@ var cartModule = (function () { // namespace
         },
 
         quantity : function () {
+
             let apiece = cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4];
 
             if (this.innerHTML == '+') {
@@ -162,6 +162,7 @@ var cartModule = (function () { // namespace
 
             data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
             cart.setCartData(data);
+            cart.openCart();
         }
 
     };
