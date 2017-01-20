@@ -38,7 +38,8 @@ var cartModule = (function () { // namespace
                 id       : parseInt(this.getAttribute('data-id')),
                 title    : this.parentNode.querySelector('.title').innerHTML,
                 price    : parseInt(this.parentNode.querySelector('.price').innerHTML),
-                quantity : parseInt(this.parentNode.querySelector('.quantity').innerHTML)
+                quantity : parseInt(this.parentNode.querySelector('.quantity').innerHTML),
+                apiece   : parseInt(this.parentNode.querySelector('.price').innerHTML)
             };
 
             let data = cart.getCartData() || {};
@@ -52,7 +53,7 @@ var cartModule = (function () { // namespace
             } else { // если товара в корзине еще нет, то добавляем в объект
 
                 localStorage.setItem('count', item.quantity + parseInt(localStorage.getItem('count')));
-                data[item.id]  = [item.id, item.title, item.price, item.quantity];
+                data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
 
             }
 
@@ -78,9 +79,9 @@ var cartModule = (function () { // namespace
                     count = count + parseInt(data[items][3]);
 
                     item += '<tr class="quantity" data-id="' + data[items][0] + '">';
-                    item += '<td>' + data[items][0] + '</td>';
-                    item += '<td>' + data[items][1] + '</td>';
-                    item += '<td>' + data[items][2] + '</td>';
+                    item += '<td class="id">' + data[items][0] + '</td>';
+                    item += '<td class="title">' + data[items][1] + '</td>';
+                    item += '<td class="price">' + data[items][2] + '</td>';
                     item += '<td><span class="decrement">-</span> <span class="count">' + data[items][3] + '</span> <span class="increment">+</span></td>';
                     item += '</tr>';
                 }
@@ -89,7 +90,7 @@ var cartModule = (function () { // namespace
                     '<table width="100%" class="table-hover">' +
                     '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th></tr>' +
                     item +
-                    '<tr><td></td><td>ИТОГО:</td><td>' + price + '</td><td>' + count + '</td></tr>' +
+                    '<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td></tr>' +
                     '</table>';
 
                 let quantity = cartContent.querySelectorAll('.quantity');
@@ -111,23 +112,46 @@ var cartModule = (function () { // namespace
         },
 
         quantity : function () {
-            dd(cartContent.querySelector('.quantity').innerHTML);
-            let quantity = cartContent.querySelectorAll('.quantity');
-
-            for(let j = 0; j < quantity.length; j++){
-
-                dd(quantity[j]);
-            }
+            let apiece = cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4];
 
             if (this.innerHTML == '+') {
+
                 this.parentNode.querySelector('.count').innerHTML++;
+                this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
                 localStorage.setItem('count', parseInt(localStorage.getItem('count')) + 1)
+
             } else {
+
                 if (this.parentNode.querySelector('.count').innerHTML > 1) {
                     this.parentNode.querySelector('.count').innerHTML--;
+                    this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
                     localStorage.setItem('count', parseInt(localStorage.getItem('count')) - 1)
                 }
             }
+
+            let quantity = this.parentNode.parentNode.parentNode.querySelectorAll('.quantity');
+
+            let all = 0;
+
+            for(let j = 0; j < quantity.length; j++){
+                all = all + parseInt(quantity[j].querySelector('.price').innerHTML);
+            }
+
+            this.parentNode.parentNode.parentNode.querySelector('.all_price').innerHTML = all;
+            this.parentNode.parentNode.parentNode.querySelector('.all_count').innerHTML = localStorage.getItem('count');
+
+            let item = {
+                id       : this.parentNode.parentNode.querySelector('.id').innerHTML,
+                title    : this.parentNode.parentNode.querySelector('.title').innerHTML,
+                price    : parseInt(this.parentNode.parentNode.querySelector('.price').innerHTML),
+                quantity : parseInt(this.parentNode.parentNode.querySelector('.count').innerHTML),
+                apiece   : apiece
+            };
+
+            var data = cart.getCartData();
+
+            data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
+            cart.setCartData(data);
         }
 
     };
