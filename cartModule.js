@@ -108,6 +108,7 @@ var cartModule = (function () { // namespace
         },
 
         delete : function () { // Удаляем элемент из корзины
+            localStorage.setItem('count', parseInt(localStorage.getItem('count')) - this.parentNode.querySelector('.count').innerHTML);
             var data = cart.getCartData();
             delete data[this.parentNode.querySelector('.id').innerHTML];
             cart.setCartData(data);
@@ -120,7 +121,7 @@ var cartModule = (function () { // namespace
             localStorage.setItem('count', 0);
         },
 
-        quantity : function () {
+        quantity : function () { // Увеличение, уменьшение количества товара
 
             let apiece = cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4];
 
@@ -139,17 +140,6 @@ var cartModule = (function () { // namespace
                 }
             }
 
-            let quantity = this.parentNode.parentNode.parentNode.querySelectorAll('.quantity');
-
-            let all = 0;
-
-            for(let j = 0; j < quantity.length; j++){
-                all = all + parseInt(quantity[j].querySelector('.price').innerHTML);
-            }
-
-            this.parentNode.parentNode.parentNode.querySelector('.all_price').innerHTML = all;
-            this.parentNode.parentNode.parentNode.querySelector('.all_count').innerHTML = localStorage.getItem('count');
-
             let item = {
                 id       : this.parentNode.parentNode.querySelector('.id').innerHTML,
                 title    : this.parentNode.parentNode.querySelector('.title').innerHTML,
@@ -158,9 +148,9 @@ var cartModule = (function () { // namespace
                 apiece   : apiece
             };
 
-            var data = cart.getCartData();
-
+            var data       = cart.getCartData();
             data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
+
             cart.setCartData(data);
             cart.openCart();
         }
