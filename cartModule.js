@@ -26,41 +26,41 @@ var cartModule = (function () { // namespace
         },
 
         getCartData : function () { // Получаем данные корзины из localStorage
-            return JSON.parse(localStorage.getItem('cart'));
+            return JSON.parse(localStorage.getItem('RudraJS-Cart'));
         },
 
         setCartData : function (key) { // Добавляем данные корзины в localStorage
-            localStorage.setItem('cart', JSON.stringify(key));
+            localStorage.setItem('RudraJS-Cart', JSON.stringify(key));
         },
 
         addToCart : function () { // Добавляем товар в корзину
             let item = {
                 id       : parseInt(this.getAttribute('data-id')),
-                title    : this.parentNode.querySelector('.title').innerHTML,
-                price    : parseInt(this.parentNode.querySelector('.price').innerHTML),
-                quantity : parseInt(this.parentNode.querySelector('.quantity').innerHTML),
-                apiece   : parseInt(this.parentNode.querySelector('.price').innerHTML)
+                title    : this.getAttribute('data-title'),
+                price    : parseInt(this.getAttribute('data-price')),
+                quantity : parseInt(this.getAttribute('data-quantity')),
+                apiece   : parseInt(this.getAttribute('data-price'))
             };
 
             let data = cart.getCartData() || {};
 
             if(data.hasOwnProperty(item.id)){ // если такой товар есть, то + 1 к количеству
 
-                localStorage.setItem('count', item.quantity + parseInt(localStorage.getItem('count'))); // Увеличиваем общее число товаров в корзине
+                localStorage.setItem('RudraJS-Cart::count', item.quantity + parseInt(localStorage.getItem('RudraJS-Cart::count'))); // Увеличиваем общее число товаров в корзине
                 data[item.id][3]  = item.quantity + data[item.id][3]; // Увеличиваем число товара в корзине
                 data[item.id][2]  = item.price * data[item.id][3]; // Увеличиваем цену
 
             } else { // если товара в корзине еще нет, то добавляем в объект
 
-                localStorage.setItem('count', item.quantity + parseInt(localStorage.getItem('count')));
+                localStorage.setItem('RudraJS-Cart::count', item.quantity + parseInt(localStorage.getItem('RudraJS-Cart::count')));
                 data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
 
             }
 
             cart.setCartData(data);
-            cartContent.innerHTML = 'Товар добавлен';
+            checkout.innerHTML = 'Товар добавлен';
             setTimeout(function(){
-                cartContent.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('count')) + '</sup>';
+                checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
             }, 1000);
         },
 
@@ -103,12 +103,12 @@ var cartModule = (function () { // namespace
                 }
 
             } else {
-                cartContent.innerHTML = 'В корзине пусто!';
+                checkout.innerHTML = 'В корзине пусто!';
             }
         },
 
         delete : function () { // Удаляем элемент из корзины
-            localStorage.setItem('count', parseInt(localStorage.getItem('count')) - this.parentNode.querySelector('.count').innerHTML);
+            localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
             var data = cart.getCartData();
             delete data[this.parentNode.querySelector('.id').innerHTML];
             cart.setCartData(data);
@@ -116,9 +116,10 @@ var cartModule = (function () { // namespace
         },
 
         clearCart : function () {
+            cartContent.innerHTML = '';
+            checkout.innerHTML    = 'Корзина очищена.';
             localStorage.clear();
-            cartContent.innerHTML = 'Корзина очищена.';
-            localStorage.setItem('count', 0);
+            localStorage.setItem('RudraJS-Cart::count', 0);
         },
 
         quantity : function () { // Увеличение, уменьшение количества товара
@@ -129,14 +130,14 @@ var cartModule = (function () { // namespace
 
                 this.parentNode.querySelector('.count').innerHTML++;
                 this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
-                localStorage.setItem('count', parseInt(localStorage.getItem('count')) + 1)
+                localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) + 1)
 
             } else {
 
                 if (this.parentNode.querySelector('.count').innerHTML > 1) {
                     this.parentNode.querySelector('.count').innerHTML--;
                     this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
-                    localStorage.setItem('count', parseInt(localStorage.getItem('count')) - 1)
+                    localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - 1)
                 }
             }
 
@@ -157,14 +158,15 @@ var cartModule = (function () { // namespace
 
     };
 
-    if (localStorage.getItem('count') === null) {
-        localStorage.setItem('count', 0);
+    if (localStorage.getItem('RudraJS-Cart::count') === null) {
+        localStorage.setItem('RudraJS-Cart::count', 0);
     }
 
     var itemBox      = document.querySelectorAll('.item');
     var cartContent  = document.querySelector('#cart_content');
+    var checkout     = document.getElementById('checkout');
 
-    cartContent.innerHTML = 'Корзина <sup>' + localStorage.getItem('count') + '</sup>';
+    checkout.innerHTML = 'Корзина <sup>' + localStorage.getItem('RudraJS-Cart::count') + '</sup>';
 
     return {
         init : function() {

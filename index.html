@@ -7,6 +7,12 @@
 <title>Тестируем корзину покупателя</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-h21C2fcDk/eFsW9sC9h0dhokq5pDinLNklTKoxIZRUn3+hvmgQSffLLQ4G4l2eEr" crossorigin="anonymous">
 
+    <style>
+        td{
+            padding: 10px;
+            border: dashed 1px black;
+        }
+    </style>
 
 </head>
 
@@ -16,30 +22,60 @@
 
         <div class="container-fluid col-md-12 text-center">
 
-            <div class="item">
-                <h3 class="title">Samsung</h3>
-                <p>Цена: <span class="price">500</span>$</p>
-                <p class="quantity">1</p>
-                <button class="add_item" data-id="1">Добавить в корзину</button>
-            </div>
-
-
-            <div class="item">
-                <h3 class="title">LG</h3>
-                <p>Цена: <span class="price">450</span>$</p>
-                <p class="quantity">1</p>
-                <button class="add_item" data-id="2">Добавить в корзину</button>
-            </div>
-
-            <div class="item">
-                <h3 class="title">Sony</h3>
-                <p>Цена: <span class="price">550</span>$</p>
-                <p class="quantity">1</p>
-                <button class="add_item" data-id="3">Добавить в корзину</button>
-            </div>
-
+            <table width="100%">
+                <tr class="item">
+                    <td class="title">Samsung</td>
+                    <td class="price">500</td>
+                    <td class="quantity">1</td>
+                    <td>
+                        <button class="add_item"
+                                data-id="1"
+                                data-title="Samsung"
+                                data-price="500"
+                                data-quantity="1"
+                        >Добавить в корзину</button>
+                    </td>
+                </tr>
+                <tr class="item">
+                    <td class="title">LG</td>
+                    <td class="price">450</td>
+                    <td class="quantity">1</td>
+                    <td>
+                        <button class="add_item"
+                                data-id="2"
+                                data-title="LG"
+                                data-price="450"
+                                data-quantity="1"
+                        >Добавить в корзину</button>
+                    </td>
+                </tr>                <tr class="item">
+                <td class="title">Toshiba</td>
+                <td class="price">498</td>
+                <td class="quantity">1</td>
+                <td>
+                    <button class="add_item"
+                            data-id="3"
+                            data-title="Toshiba"
+                            data-price="498"
+                            data-quantity="1"
+                    >Добавить в корзину</button>
+                </td>
+            </tr>                <tr class="item">
+                <td class="title">Sony</td>
+                <td class="price">510</td>
+                <td class="quantity">1</td>
+                <td>
+                    <button class="add_item"
+                            data-id="4"
+                            data-title="Sony"
+                            data-price="510"
+                            data-quantity="1"
+                    >Добавить в корзину</button>
+                </td>
+            </tr>
+            </table>
+            <br>
             <p><button id="checkout">Оформить заказ</button> &nbsp; <button id="clear_cart">Очистить корзину</button></p>
-
 
             <div class="container-fluid col-md-12 text-center" id="cart_content"></div>
 
