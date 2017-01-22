@@ -10,6 +10,14 @@ var cartModule = (function () { // namespace
         addAllEvents : function () { // Добавляем все события
             for(var i = 0; i < itemBox.length; i++){
                 this.addEvent(itemBox[i].querySelector('.add_item'), 'click', this.addToCart);
+                this.addEvent(itemBox[i].querySelector('.decrement'), 'click', function () {
+                    if (this.parentNode.querySelector('.count').innerHTML > 1) {
+                        this.parentNode.querySelector('.count').innerHTML--;
+                    }
+                });
+                this.addEvent(itemBox[i].querySelector('.increment'), 'click', function () {
+                    this.parentNode.querySelector('.count').innerHTML++;
+                });
             }
             this.addEvent(document.getElementById('checkout'), 'click', this.openCart);
         },
@@ -37,7 +45,7 @@ var cartModule = (function () { // namespace
                 id       : parseInt(this.getAttribute('data-id')),
                 title    : this.getAttribute('data-title'),
                 price    : parseInt(this.getAttribute('data-price')),
-                quantity : parseInt(this.getAttribute('data-quantity')),
+                quantity : parseInt(this.parentNode.parentNode.querySelector('.count').innerHTML),
                 apiece   : parseInt(this.getAttribute('data-price'))
             };
 
@@ -49,9 +57,11 @@ var cartModule = (function () { // namespace
                 data[item.id][3]  = item.quantity + data[item.id][3]; // Увеличиваем число товара в корзине
                 data[item.id][2]  = item.price * data[item.id][3]; // Увеличиваем цену
 
+                dd(data);
             } else { // если товара в корзине еще нет, то добавляем в объект
 
                 localStorage.setItem('RudraJS-Cart::count', item.quantity + parseInt(localStorage.getItem('RudraJS-Cart::count')));
+                item.price    = item.price * item.quantity;
                 data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
 
             }
@@ -110,13 +120,18 @@ var cartModule = (function () { // namespace
             }
         },
 
+
         delete : function () { // Удаляем элемент из корзины
+
             localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
             var data = cart.getCartData();
             delete data[this.parentNode.querySelector('.id').innerHTML];
+
+
             cart.setCartData(data);
             cart.openCart();
             checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
+
         },
 
         clearCart : function () {
@@ -147,9 +162,12 @@ var cartModule = (function () { // namespace
 
                 } else {
 
+
                     localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
                     delete data[this.parentNode.parentNode.querySelector('.id').innerHTML];
                     this.parentNode.parentNode.innerHTML = '';
+
+
                     cart.setCartData(data);
                     cart.openCart();
                     checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
@@ -167,6 +185,7 @@ var cartModule = (function () { // namespace
             };
 
             data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
+
 
             cart.setCartData(data);
             cart.openCart();
