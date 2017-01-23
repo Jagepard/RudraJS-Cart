@@ -64,10 +64,10 @@ var cartModule = (function () { // namespace
             }
 
             cart.setCartData(data);
-            cartContent.innerHTML = '';
-            checkout.innerHTML    = 'Товар добавлен';
+            cart.getContent().innerHTML  = '';
+            cart.getCheckout().innerHTML = 'Товар добавлен';
             setTimeout(function(){
-                checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
+                cart.getCheckout().innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
             }, 1000);
         },
 
@@ -75,7 +75,6 @@ var cartModule = (function () { // namespace
             let data = cart.getCartData() || {};
 
             if(Object.keys(data).length !== 0){
-
                 let count = 0;
                 let price = 0;
                 let item  = '';
@@ -85,23 +84,23 @@ var cartModule = (function () { // namespace
                     price = price + parseInt(data[items][2]);
                     count = count + parseInt(data[items][3]);
 
-                    item += '<tr class="quantity" data-id="' + data[items][0] + '">';
-                    item += '<td class="id">' + data[items][0] + '</td>';
-                    item += '<td class="title">' + data[items][1] + '</td>';
-                    item += '<td class="price">' + data[items][2] + '</td>';
-                    item += '<td><button class="decrement btn btn-primary">-</button> <button class="count btn btn-default">' + data[items][3] + '</button> <button class="increment btn btn-primary">+</button></td>';
-                    item += '<td class="delete"><button class="btn btn-warning">Удалить</button></td>';
-                    item += '</tr>';
+                    item += '<tr class="quantity" data-id="' + data[items][0] + '">'
+                         + '<td class="id">' + data[items][0] + '</td>'
+                         + '<td class="title">' + data[items][1] + '</td>'
+                         + '<td class="price">' + data[items][2] + '</td>'
+                         + '<td><button class="decrement btn btn-primary">-</button> <button class="count btn btn-default">' + data[items][3] + '</button> <button class="increment btn btn-primary">+</button></td>'
+                         + '<td class="delete"><button class="btn btn-warning">Удалить</button></td>'
+                         + '</tr>';
                 }
 
-                cartContent.innerHTML = '' +
-                    '<table width="100%" class="table table-bordered table-hover">' +
-                    '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th><th></th></tr>' +
-                    item +
-                    '<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td><td><button id="clear_cart" class="btn btn-default">Очистить корзину</button></td></tr>' +
-                    '</table>';
+                cart.getContent().innerHTML = ''
+                    + '<table width="100%" class="table table-bordered table-hover">'
+                    + '<tr><th>id</th><th>Наименование</th><th>Цена</th><th>Кол-во</th><th></th></tr>'
+                    + item
+                    +'<tr><td></td><td>ИТОГО:</td><td class="all_price">' + price + '</td><td class="all_count">' + count + '</td><td><button id="clear_cart" class="btn btn-default">Очистить корзину</button></td></tr>'
+                    + '</table>';
 
-                let quantity = cartContent.querySelectorAll('.quantity');
+                let quantity = cart.getContent().querySelectorAll('.quantity');
 
                 for(let j = 0; j < quantity.length; j++){
                     cart.addEvent(quantity[j].querySelector('.decrement'), 'click', cart.quantity);
@@ -112,92 +111,93 @@ var cartModule = (function () { // namespace
                 cart.addEvent(document.getElementById('clear_cart'), 'click', cart.clearCart);
 
             } else {
-                checkout.innerHTML    = 'В корзине пусто!';
-                cartContent.innerHTML = ''
+                cart.getCheckout().innerHTML = 'В корзине пусто!';
+                cart.getContent().innerHTML  = ''
             }
         },
 
 
         delete : function () { // Удаляем элемент из корзины
-
             localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
             var data = cart.getCartData();
             delete data[this.parentNode.querySelector('.id').innerHTML];
 
-
             cart.setCartData(data);
             cart.openCart();
-            checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
-
+            cart.checkout();
         },
 
         clearCart : function () {
-            cartContent.innerHTML = '';
-            checkout.innerHTML    = 'Корзина очищена.';
+            cart.getContent().innerHTML  = '';
+            cart.getCheckout().innerHTML = 'Корзина очищена.';
             localStorage.clear();
             localStorage.setItem('RudraJS-Cart::count', 0);
         },
 
         quantity : function () { // Увеличение, уменьшение количества товара
+            let item = {
+                id       : parseInt(this.parentNode.parentNode.querySelector('.id').innerHTML),
+                title    : this.parentNode.parentNode.querySelector('.title').innerHTML,
+                price    : this.parentNode.parentNode.querySelector('.price'),
+                count    : this.parentNode.parentNode.querySelector('.count'),
+                apiece   : cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4],
+                data     : cart.getCartData(),
+            };
 
-            let apiece = cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4];
-            let data   = cart.getCartData();
+
 
             if (this.innerHTML == '+') {
-
-                this.parentNode.querySelector('.count').innerHTML++;
-                this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
+                item.count.innerHTML++;
+                item.price.innerHTML = item.count.innerHTML * item.apiece;
                 localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) + 1);
 
             } else {
-
-                if (this.parentNode.querySelector('.count').innerHTML > 1) {
-
-                    this.parentNode.querySelector('.count').innerHTML--;
-                    this.parentNode.parentNode.querySelector('.price').innerHTML = this.parentNode.querySelector('.count').innerHTML * apiece;
+                if (item.count.innerHTML > 1) {
+                    item.count.innerHTML--;
+                    item.price.innerHTML = item.count.innerHTML * item.apiece;
                     localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - 1);
-
                 } else {
-
-
-                    localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
-                    delete data[this.parentNode.parentNode.querySelector('.id').innerHTML];
+                    localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - item.count.innerHTML);
+                    delete item.data[item.id];
                     this.parentNode.parentNode.innerHTML = '';
 
-
-                    cart.setCartData(data);
+                    cart.setCartData(item.data);
                     cart.openCart();
-                    checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
+                    cart.checkout();
 
                     return false;
                 }
             }
 
-            let item = {
-                id       : this.parentNode.parentNode.querySelector('.id').innerHTML,
-                title    : this.parentNode.parentNode.querySelector('.title').innerHTML,
-                price    : parseInt(this.parentNode.parentNode.querySelector('.price').innerHTML),
-                quantity : parseInt(this.parentNode.parentNode.querySelector('.count').innerHTML),
-                apiece   : apiece
-            };
+            item.data[item.id]  = [item.id, item.title, item.price.innerHTML, item.count.innerHTML, item.apiece];
 
-            data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
-
-            cart.setCartData(data);
+            cart.setCartData(item.data);
             cart.openCart();
-            checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
+            cart.checkout();
+        },
+
+        checkout : function () {
+            this.getCheckout().innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
+        },
+
+        setLocalStorage : function () {
+            if (localStorage.getItem('RudraJS-Cart::count') === null) {
+                localStorage.setItem('RudraJS-Cart::count', 0);
+            }
+        },
+
+        getContent : function () {
+            return document.getElementById('cart_content');
+        },
+
+        getCheckout : function () {
+            return document.getElementById('checkout');
         }
 
     };
 
-    if (localStorage.getItem('RudraJS-Cart::count') === null) {
-        localStorage.setItem('RudraJS-Cart::count', 0);
-    }
-
-    var cartContent  = document.getElementById('cart_content');
-    var checkout     = document.getElementById('checkout');
-
-    checkout.innerHTML = 'Корзина <sup>' + localStorage.getItem('RudraJS-Cart::count') + '</sup>';
+    cart.setLocalStorage();
+    cart.checkout();
 
     return {
         init : function() {
@@ -205,7 +205,6 @@ var cartModule = (function () { // namespace
                 cart.addAllEvents();
             });
         },
-
     }
 
 })();

@@ -65,7 +65,6 @@ var cartModule = (function ($) { // namespace
             let data = cart.getCartData() || {};
 
             if(Object.keys(data).length !== 0){
-
                 let count = 0;
                 let price = 0;
                 let item  = '';
