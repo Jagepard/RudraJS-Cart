@@ -8,6 +8,8 @@ var cartModule = (function () { // namespace
 
     var cart = {
         addAllEvents : function () { // Добавляем все события
+            let itemBox = document.getElementsByClassName('item');
+
             for(var i = 0; i < itemBox.length; i++){
                 this.addEvent(itemBox[i].querySelector('.add_item'), 'click', this.addToCart);
                 this.addEvent(itemBox[i].querySelector('.decrement'), 'click', function () {
@@ -52,18 +54,13 @@ var cartModule = (function () { // namespace
             let data = cart.getCartData() || {};
 
             if(data.hasOwnProperty(item.id)){ // если такой товар есть, то + 1 к количеству
-
                 localStorage.setItem('RudraJS-Cart::count', item.quantity + parseInt(localStorage.getItem('RudraJS-Cart::count'))); // Увеличиваем общее число товаров в корзине
                 data[item.id][3]  = item.quantity + data[item.id][3]; // Увеличиваем число товара в корзине
                 data[item.id][2]  = item.price * data[item.id][3]; // Увеличиваем цену
-
-                dd(data);
             } else { // если товара в корзине еще нет, то добавляем в объект
-
                 localStorage.setItem('RudraJS-Cart::count', item.quantity + parseInt(localStorage.getItem('RudraJS-Cart::count')));
-                item.price    = item.price * item.quantity;
+                item.price     = item.price * item.quantity;
                 data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
-
             }
 
             cart.setCartData(data);
@@ -144,7 +141,7 @@ var cartModule = (function () { // namespace
         quantity : function () { // Увеличение, уменьшение количества товара
 
             let apiece = cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4];
-            var data   = cart.getCartData();
+            let data   = cart.getCartData();
 
             if (this.innerHTML == '+') {
 
@@ -186,7 +183,6 @@ var cartModule = (function () { // namespace
 
             data[item.id]  = [item.id, item.title, item.price, item.quantity, item.apiece];
 
-
             cart.setCartData(data);
             cart.openCart();
             checkout.innerHTML = 'Корзина <sup>' + parseInt(localStorage.getItem('RudraJS-Cart::count')) + '</sup>';
@@ -198,8 +194,7 @@ var cartModule = (function () { // namespace
         localStorage.setItem('RudraJS-Cart::count', 0);
     }
 
-    var itemBox      = document.querySelectorAll('.item');
-    var cartContent  = document.querySelector('#cart_content');
+    var cartContent  = document.getElementById('cart_content');
     var checkout     = document.getElementById('checkout');
 
     checkout.innerHTML = 'Корзина <sup>' + localStorage.getItem('RudraJS-Cart::count') + '</sup>';
