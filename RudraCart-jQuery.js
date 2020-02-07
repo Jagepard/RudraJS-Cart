@@ -1,5 +1,6 @@
 /**
- * Created by Dan on 14.01.2017.
+ * @author  : Jagepard <jagepard@yandex.ru>
+ * @license https://mit-license.org/ MIT
  */
 
 ;'use strict';
