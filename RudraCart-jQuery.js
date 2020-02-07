@@ -105,7 +105,6 @@ var cartModule = (function ($) { // namespace
             }
         },
 
-
         delete : function () { // Удаляем элемент из корзины
             localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
             let data = cart.getCartData();
@@ -179,7 +178,6 @@ var cartModule = (function ($) { // namespace
         getCheckout : function () {
             return $('#checkout');
         }
-
     };
 
     cart.setLocalStorage();
@@ -190,7 +188,6 @@ var cartModule = (function ($) { // namespace
             return $(document).ready(cart.addAllEvents());
         },
     }
-
 })(jQuery);
 
 function dd(data) {
