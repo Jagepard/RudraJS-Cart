@@ -117,7 +117,6 @@ var cartModule = (function () { // namespace
             }
         },
 
-
         delete : function () { // Удаляем элемент из корзины
             localStorage.setItem('RudraJS-Cart::count', parseInt(localStorage.getItem('RudraJS-Cart::count')) - this.parentNode.querySelector('.count').innerHTML);
             var data = cart.getCartData();
@@ -144,8 +143,6 @@ var cartModule = (function () { // namespace
                 apiece   : cart.getCartData()[this.parentNode.parentNode.querySelector('.id').innerHTML][4],
                 data     : cart.getCartData(),
             };
-
-
 
             if (this.innerHTML == '+') {
                 item.count.innerHTML++;
@@ -194,7 +191,6 @@ var cartModule = (function () { // namespace
         getCheckout : function () {
             return document.getElementById('checkout');
         }
-
     };
 
     cart.setLocalStorage();
